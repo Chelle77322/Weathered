@@ -1,3 +1,5 @@
+/* eslint-disable import /
+no--extraneous-dependencies */
 import { merge }  from 'webpack-merge';
 import  webpackBaseConfig  from './webpack.base.config.js';
 import path from 'path';
@@ -10,15 +12,20 @@ let developmentConfig = () => {
   return merge([
     {
      mode: 'development',
-     entry:'./src/index.js',
+     entry: path.join(__dirname,"src", "App.jsx"),
      output:{
-      path: path.resolve(__dirname, "dist",),
-      publicPath: "/",
-      main: "/dist/main.js",
+      path: path.join(__dirname, "dist"),
+      filename: "main.js",
+      publicPath: "./",
+    libraryTarget: "commonjs2"
      },
+     debug: true,
+     devtool: 'source-map',
+
      performance: {
       hints: process.env.NODE_ENV === 'development' ? "warning" : false
     },
+    
       plugins: [
         new webpack.DefinePlugin({
           isDevelopment: true,

@@ -1,6 +1,6 @@
 import React,{ Component} from 'react';
 import Search from '../Search/Search.jsx';
-import api from '../../utils/api.js';
+import api from '../../../../utils/api.js';
 
 
 class Weather extends Component {

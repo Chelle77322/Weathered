@@ -1,7 +1,7 @@
 import { merge }  from 'webpack-merge';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
 import path from "path";
 import { fileURLToPath } from 'url';
 import  webpack  from 'webpack';
@@ -13,11 +13,16 @@ console.log('directory-name', __dirname);
 let webpackBaseConfig = () => {
   return merge([
     {
-      mode: 'performance',
+      externals: {
+        "fs": "commonjs fs",
+        "net": "commonjs net",
+      },
+
+      mode: 'none',
       performance: {
         hints: false,
-        maxEntrypointSize: 512000,
-        maxAssetSize: 512000
+        maxEntrypointSize: 2560000,
+        maxAssetSize: 2560000
     },
       module: {
     
@@ -61,33 +66,52 @@ let webpackBaseConfig = () => {
             ]
           
         },
-          {
-            test: /\.(jpg|png)$/,
-            use: {
-              loader: 'url-loader',
-            },
-          },
+     
+          //{
+            //test: /\.(jpg|png)$/,
+            //use: {
+              //loader: 'url-loader',
+              //options: {
+                //limit: true,
+              //},
+            //},
+            //type: 'javascript/auto'
+          //},
+          //{
+          //  type: "asset",
+          //  parser: {
+          //    dataUrlCondition: {
+           //     maxSize: 10240
+          //    },
+             
+          //  }
+         // }
         
         ],
+      },
+      resolve: {
+        fallback: {
+          "async_hooks": false
+        }
       },
       plugins: [
         new HtmlWebpackPlugin({
           template: './public/index.html',
-          filename: './index.html'
+          filename: 'index.html'
         }),
         new MiniCssExtractPlugin({
-         
-          
         }),
+        new NodePolyfillPlugin(),
         new webpack.DefinePlugin({
-        'process.env': {
-          WEBPACK: JSON.stringify(true),
-      }
-    }),
+          'process.platform': JSON.stringify(process.platform)
+        }),
       ],
       devServer: {
         historyApiFallback: true,
-        
+        static: {
+          directory: path.join(__dirname, 'public'),
+            
+          }
       }
   }]);
     };
