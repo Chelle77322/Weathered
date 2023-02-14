@@ -5,7 +5,8 @@ import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
 import path from "path";
 import { fileURLToPath } from 'url';
 import  webpack  from 'webpack';
- const __filename = fileURLToPath(import.meta.url);
+
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log('directory-name', __dirname);
 
@@ -17,7 +18,6 @@ let webpackBaseConfig = () => {
         "fs": "commonjs fs",
         "net": "commonjs net",
       },
-
       mode: 'none',
       performance: {
         hints: false,
@@ -25,7 +25,6 @@ let webpackBaseConfig = () => {
         maxAssetSize: 2560000
     },
       module: {
-    
         rules: [
           {
             test: /\.js$/,
@@ -99,12 +98,14 @@ let webpackBaseConfig = () => {
           template: './public/index.html',
           filename: 'index.html'
         }),
-        new MiniCssExtractPlugin({
-        }),
-        new NodePolyfillPlugin(),
         new webpack.DefinePlugin({
           'process.platform': JSON.stringify(process.platform)
         }),
+        new NodePolyfillPlugin(),
+        new MiniCssExtractPlugin({
+        })
+     
+        
       ],
       devServer: {
         historyApiFallback: true,
